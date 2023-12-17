@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 /**
  * Utility class for working with DOCX files and extracting CV information.
+ * 
+ * @author <a href="https://github.com/Trustacean">Edward</a>
  */
 public class DocxUtils {
 

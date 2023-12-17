@@ -1,7 +1,11 @@
 package main.java.models;
 
 import java.io.File;
-
+/**
+ * Object class to store CV informations.
+ * 
+ * @author <a href="https://github.com/Trustacean">Edward</a>
+ */
 public class CV {
     private String name;
     private String id;
