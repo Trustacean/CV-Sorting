@@ -1,13 +1,12 @@
 package main.java.models;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 
 class AVLNode {
     CV data;
     AVLNode left, right;
     int height;
-    ArrayList<CV> result;
+    CV[] resultArray; // Replace ArrayList with an array
 
     public AVLNode(CV cv) {
         data = cv;
@@ -17,9 +16,16 @@ class AVLNode {
 
 public class AVLTree {
     private AVLNode root;
+    private int size; // Variable to store the size of the AVL tree
+
+    public AVLTree() {
+        this.root = null;
+        this.size = 0;
+    }
 
     public void insert(CV cv, Comparator<CV> comparator) {
         root = insert(root, cv, comparator);
+        size++;
     }
 
     private int height(AVLNode node) {
@@ -98,46 +104,49 @@ public class AVLTree {
         return node;
     }
 
-    public ArrayList<CV> inOrder() {
-        ArrayList<CV> result = new ArrayList<>();
-        inOrder(root, result);
+    public CV[] inOrder() {
+        CV[] result = new CV[size];
+        inOrder(root, result, 0);
         return result;
     }
 
-    private void inOrder(AVLNode node, ArrayList<CV> result) {
+    private int inOrder(AVLNode node, CV[] result, int index) {
         if (node != null) {
-            inOrder(node.left, result);
-            result.add(node.data);
-            inOrder(node.right, result);
+            index = inOrder(node.left, result, index);
+            result[index++] = node.data;
+            index = inOrder(node.right, result, index);
         }
+        return index;
     }
 
-    public ArrayList<CV> preOrder() {
-        ArrayList<CV> result = new ArrayList<>();
-        preOrder(root, result);
+    public CV[] preOrder() {
+        CV[] result = new CV[size];
+        preOrder(root, result, 0);
         return result;
     }
 
-    private void preOrder(AVLNode node, ArrayList<CV> result) {
+    private int preOrder(AVLNode node, CV[] result, int index) {
         if (node != null) {
-            result.add(node.data);
-            preOrder(node.left, result);
-            preOrder(node.right, result);
+            result[index++] = node.data;
+            index = preOrder(node.left, result, index);
+            index = preOrder(node.right, result, index);
         }
+        return index;
     }
 
-    public ArrayList<CV> postOrder() {
-        ArrayList<CV> result = new ArrayList<>();
-        postOrder(root, result);
+    public CV[] postOrder() {
+        CV[] result = new CV[size];
+        postOrder(root, result, 0);
         return result;
     }
 
-    private void postOrder(AVLNode node, ArrayList<CV> result) {
+    private int postOrder(AVLNode node, CV[] result, int index) {
         if (node != null) {
-            postOrder(node.left, result);
-            postOrder(node.right, result);
-            result.add(node.data);
+            index = postOrder(node.left, result, index);
+            index = postOrder(node.right, result, index);
+            result[index++] = node.data;
         }
+        return index;
     }
 
     public CV searchById(String id) {
@@ -160,29 +169,24 @@ public class AVLTree {
         }
     }
 
-    public ArrayList<CV> searchByName(String name) {
-        ArrayList<CV> result = new ArrayList<>();
-        searchByName(root, name, result);
-        return result;
+    public CV searchByName(String name) {
+        return searchByName(root, name);
     }
-
-    private void searchByName(AVLNode node, String name, ArrayList<CV> result) {
-        if (node != null) {
-            int comparison = name.compareTo(node.data.getName());
-
-            if (comparison == 0) {
-                // Found a matching CV
-                result.add(node.data);
-                // Continue searching in both subtrees in case there are multiple CVs with the same name
-                searchByName(node.left, name, result);
-                searchByName(node.right, name, result);
-            } else if (comparison < 0) {
-                // Search in the left subtree
-                searchByName(node.left, name, result);
-            } else {
-                // Search in the right subtree
-                searchByName(node.right, name, result);
-            }
+    
+    private CV searchByName(AVLNode node, String name) {
+        if (node == null) {
+            return null; // CV not found
+        }
+    
+        int comparison = name.compareTo(node.data.getName()); // Compare with the name, not ID
+    
+        if (comparison == 0) {
+            return node.data; // Found the CV
+        } else if (comparison < 0) {
+            return searchByName(node.left, name); // Search in the left subtree
+        } else {
+            return searchByName(node.right, name); // Search in the right subtree
         }
     }
+    
 }
