@@ -2,70 +2,60 @@ package main.java.models;
 
 import java.util.Comparator;
 
+/**
+ * Represents a node in an AVL tree.
+ */
 class AVLNode {
     CV data;
     AVLNode left, right;
     int height;
-    CV[] resultArray; // Replace ArrayList with an array
+    CV[] resultArray;
 
+    /**
+     * Constructs an AVLNode with the specified CV data.
+     *
+     * @param cv The CV data to be stored in the node.
+     */
     public AVLNode(CV cv) {
         data = cv;
         height = 1;
     }
 }
 
+/**
+ * Represents an AVL Tree data structure for storing CV objects.
+ */
 public class AVLTree {
     private AVLNode root;
-    private int size; // Variable to store the size of the AVL tree
+    private int size;
 
+    /**
+     * Constructs an empty AVL tree.
+     */
     public AVLTree() {
         this.root = null;
         this.size = 0;
     }
 
+    /**
+     * Inserts a CV into the AVL tree while maintaining balance.
+     *
+     * @param cv         The CV to be inserted.
+     * @param comparator The comparator to determine the insertion order.
+     */
     public void insert(CV cv, Comparator<CV> comparator) {
         root = insert(root, cv, comparator);
         size++;
     }
 
-    private int height(AVLNode node) {
-        if (node == null)
-            return 0;
-        return node.height;
-    }
-
-    private int getBalance(AVLNode node) {
-        if (node == null)
-            return 0;
-        return height(node.left) - height(node.right);
-    }
-
-    private AVLNode rightRotate(AVLNode y) {
-        AVLNode x = y.left;
-        AVLNode T2 = x.right;
-
-        x.right = y;
-        y.left = T2;
-
-        y.height = Math.max(height(y.left), height(y.right)) + 1;
-        x.height = Math.max(height(x.left), height(x.right)) + 1;
-
-        return x;
-    }
-
-    private AVLNode leftRotate(AVLNode x) {
-        AVLNode y = x.right;
-        AVLNode T2 = y.left;
-
-        y.left = x;
-        x.right = T2;
-
-        x.height = Math.max(height(x.left), height(x.right)) + 1;
-        y.height = Math.max(height(y.left), height(y.right)) + 1;
-
-        return y;
-    }
-
+    /**
+     * Inserts a CV into the AVL tree while maintaining balance.
+     *
+     * @param node       The current AVLNode being considered for insertion.
+     * @param cv         The CV to be inserted.
+     * @param comparator The comparator to determine the insertion order.
+     * @return The updated AVLNode after insertion.
+     */
     private AVLNode insert(AVLNode node, CV cv, Comparator<CV> comparator) {
         if (node == null)
             return new AVLNode(cv);
@@ -104,6 +94,49 @@ public class AVLTree {
         return node;
     }
 
+    private AVLNode rightRotate(AVLNode y) {
+        AVLNode x = y.left;
+        AVLNode T2 = x.right;
+
+        x.right = y;
+        y.left = T2;
+
+        y.height = Math.max(height(y.left), height(y.right)) + 1;
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
+
+        return x;
+    }
+
+    private AVLNode leftRotate(AVLNode x) {
+        AVLNode y = x.right;
+        AVLNode T2 = y.left;
+
+        y.left = x;
+        x.right = T2;
+
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
+        y.height = Math.max(height(y.left), height(y.right)) + 1;
+
+        return y;
+    }
+
+    private int height(AVLNode node) {
+        if (node == null)
+            return 0;
+        return node.height;
+    }
+
+    private int getBalance(AVLNode node) {
+        if (node == null)
+            return 0;
+        return height(node.left) - height(node.right);
+    }
+
+    /**
+     * Performs an in-order traversal of the AVL tree and returns an array of CVs.
+     *
+     * @return An array of CVs representing the in-order traversal result.
+     */
     public CV[] inOrder() {
         CV[] result = new CV[size];
         inOrder(root, result, 0);
@@ -119,6 +152,11 @@ public class AVLTree {
         return index;
     }
 
+    /**
+     * Performs a pre-order traversal of the AVL tree and returns an array of CVs.
+     *
+     * @return An array of CVs representing the pre-order traversal result.
+     */
     public CV[] preOrder() {
         CV[] result = new CV[size];
         preOrder(root, result, 0);
@@ -134,6 +172,11 @@ public class AVLTree {
         return index;
     }
 
+    /**
+     * Performs a post-order traversal of the AVL tree and returns an array of CVs.
+     *
+     * @return An array of CVs representing the post-order traversal result.
+     */
     public CV[] postOrder() {
         CV[] result = new CV[size];
         postOrder(root, result, 0);
@@ -149,6 +192,12 @@ public class AVLTree {
         return index;
     }
 
+    /**
+     * Searches for a CV by its ID in the AVL tree.
+     *
+     * @param id The ID of the CV to search for.
+     * @return The CV with the specified ID, or null if not found.
+     */
     public CV searchById(String id) {
         return searchById(root, id);
     }
@@ -169,17 +218,23 @@ public class AVLTree {
         }
     }
 
+    /**
+     * Searches for a CV by its name in the AVL tree.
+     *
+     * @param name The name of the CV to search for.
+     * @return The CV with the specified name, or null if not found.
+     */
     public CV searchByName(String name) {
         return searchByName(root, name);
     }
-    
+
     private CV searchByName(AVLNode node, String name) {
         if (node == null) {
             return null; // CV not found
         }
-    
-        int comparison = name.compareTo(node.data.getName()); // Compare with the name, not ID
-    
+
+        int comparison = name.compareTo(node.data.getName());
+
         if (comparison == 0) {
             return node.data; // Found the CV
         } else if (comparison < 0) {
@@ -188,5 +243,4 @@ public class AVLTree {
             return searchByName(node.right, name); // Search in the right subtree
         }
     }
-    
 }

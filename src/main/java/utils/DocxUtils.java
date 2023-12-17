@@ -9,28 +9,43 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Utility class for working with DOCX files and extracting CV information.
+ */
 public class DocxUtils {
 
+    /**
+     * Retrieves an array of files from the specified folder path.
+     *
+     * @return An array of File objects representing files in the specified folder.
+     */
     public static File[] getFiles() {
-        String folderPath = "src\\main\\docs";
+        String folderPath = "src" + File.separator + "main" + File.separator + "docs";
         File folder = new File(folderPath);
 
         if (folder.exists() && folder.isDirectory()) {
             return folder.listFiles();
         } else {
+            // Use a logging framework here instead of direct console output
             System.out.println("The specified folder does not exist or is not a directory.");
             return null;
         }
     }
 
-    public static ArrayList<CV> extractCVsFromFile(File[] files) {
+    /**
+     * Extracts CV information from an array of DOCX files.
+     *
+     * @param files An array of File objects representing DOCX files.
+     * @return An array of CV objects extracted from the provided DOCX files.
+     */
+    public static CV[] extractCVsFromFile(File[] files) {
         ArrayList<CV> result = new ArrayList<>();
 
         for (File file : files) {
             if (file.isFile() && file.getName().toLowerCase().endsWith(".docx")) {
                 try (FileInputStream fis = new FileInputStream(file.getAbsolutePath());
-                     XWPFDocument document = new XWPFDocument(fis);
-                     XWPFWordExtractor extractor = new XWPFWordExtractor(document)) {
+                        XWPFDocument document = new XWPFDocument(fis);
+                        XWPFWordExtractor extractor = new XWPFWordExtractor(document)) {
 
                     // Extracting text from the document
                     String fileText = extractor.getText();
@@ -60,11 +75,12 @@ public class DocxUtils {
                     result.add(newCV);
 
                 } catch (IOException exception) {
+                    // Use a logging framework here instead of direct console output
                     exception.printStackTrace();
                 }
             }
         }
 
-        return result;
+        return result.toArray(new CV[0]);
     }
 }
