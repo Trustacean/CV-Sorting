@@ -105,7 +105,7 @@ public class MainFrame {
      * Sets up and displays the table in the frame.
      */
     private void showTable() {
-        String[] columnNames = { "Name", "Id", "First Choice", "Second Choice" };
+        String[] columnNames = { "No", "Name", "Id", "First Choice", "Second Choice" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -114,6 +114,7 @@ public class MainFrame {
         table.setModel(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.getTableHeader().setReorderingAllowed(false);
+        table.getColumnModel().getColumn(0).setPreferredWidth(15);
 
         refreshTable((CV[]) tree.inOrder());
 
@@ -128,9 +129,11 @@ public class MainFrame {
      * @param results The array of CVs to be displayed in the table.
      */
     private void refreshTable(CV[] results) {
+        int count=0;
         tableModel.setRowCount(0);
         for (CV cv : results) {
-            tableModel.addRow(new String[] { cv.getName(), cv.getId(), cv.getPosition1(), cv.getPosition2() });
+            count++;
+            tableModel.addRow(new String[] { Integer.toString(count) ,cv.getName(), cv.getId(), cv.getPosition1(), cv.getPosition2() });
         }
     }
     
