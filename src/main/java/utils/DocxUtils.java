@@ -22,13 +22,13 @@ public class DocxUtils {
      * @return An array of File objects representing files in the specified folder.
      */
     public static File[] getFiles() {
+        // Directory CV Sorting/src/main/docs/file.docx
         String folderPath = "src" + File.separator + "main" + File.separator + "docs";
         File folder = new File(folderPath);
 
         if (folder.exists() && folder.isDirectory()) {
             return folder.listFiles();
         } else {
-            // Use a logging framework here instead of direct console output
             System.out.println("The specified folder does not exist or is not a directory.");
             return null;
         }
@@ -77,7 +77,6 @@ public class DocxUtils {
                     result.add(newCV);
 
                 } catch (IOException exception) {
-                    // Use a logging framework here instead of direct console output
                     exception.printStackTrace();
                 }
             }

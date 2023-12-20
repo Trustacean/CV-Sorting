@@ -4,7 +4,10 @@ import java.util.Comparator;
 
 /**
  * Represents a node in an AVL tree.
+ * 
+ * @author <a href="https://github.com/Trustacean">Edward</a>
  */
+
 class AVLNode {
     CV data;
     AVLNode left, right;
@@ -21,6 +24,7 @@ class AVLNode {
         height = 1;
     }
 }
+
 
 /**
  * Represents an AVL Tree data structure for storing CV objects.
