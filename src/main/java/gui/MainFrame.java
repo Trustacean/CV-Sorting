@@ -144,7 +144,7 @@ public class MainFrame {
      */
     private void filterTable(String searchTerm) {
         if (searchTerm.isEmpty()) {
-            refreshTable((CV[]) tree.inOrder());
+            refreshTable(getOrderedCVs());
         } else {
             CV[] filteredResults;
             
